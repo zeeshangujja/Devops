@@ -1,4 +1,4 @@
-# Base image for frontend (Angular)
+# Base image 
 FROM node:20.11.1
 
 # Install http-server globally for serving the frontend
@@ -6,16 +6,16 @@ RUN npm install -g http-server
 RUN npm install -g angular-http-server
 
 # Set the working directory for frontend
-WORKDIR /app/client
+WORKDIR /app/cli
 
 # Copy the package.json and package-lock.json for the frontend
-COPY client/package*.json ./
+COPY cli/package*.json ./
 
 # Install frontend dependencies
 RUN npm install
 
-# Copy the entire client folder to ensure the Angular workspace is present
-COPY client/ .
+# Copy the entire client folder to ensure the workspace is present
+COPY cli/ .
 
 # Build the frontend for staging
 RUN npm run build-server
