@@ -1,0 +1,20 @@
+# Base image backend (Node.js)
+FROM node:20.11.1
+
+# Set the working directory for backend
+WORKDIR /app/server
+
+# Copy the package.json and package-lock.json for the backend
+COPY server/package*.json ./
+
+# Install backend dependencies
+RUN npm install
+
+# Copy the backend source code (including .env.staging)
+COPY server/ .
+
+# Expose the backend port
+EXPOSE ....
+
+# Start the backend
+CMD ["sh", "-c", "npm run staging"]
