@@ -46,43 +46,34 @@ Production vs Staging — prod build is minified and tree-shaken, staging build 
 Layer caching — dependencies installed before source copy so rebuilds are fast
 
 
-⚙️ CI/CD Pipeline — GitHub Actions
-File: .github/workflows/ci-cd.yml
-Pipeline Flow
-git push (main or staging branch)
-        │
-        ▼
-  ┌─────────────┐
-  │  1. Test    │  lint + unit tests — backend & frontend
-  └──────┬──────┘
-         │ pass
-         ├─────────────────────────┐
-         │                         │
-   staging branch             main branch
-         │                         │
-  ┌──────▼──────┐           ┌──────▼──────┐
-  │  2. Build   │           │  3. Build   │
-  │  Staging    │           │  Production │
-  │  (2 images) │           │  (2 images) │
-  └──────┬──────┘           └──────┬──────┘
-         │                         │
-  ┌──────▼──────┐           ┌──────▼──────┐
-  │  4. Deploy  │           │  5. Deploy  │
-  │  Staging    │           │  Production │
-  │  Server     │           │  Server     │
-  └─────────────┘           └─────────────┘
-Jobs Breakdown
-JobTriggerWhat runstestevery pushlint + unit tests on backend and frontendbuild-stagingstaging branch onlybuilds 2 Docker images → pushes to registrybuild-productionmain branch onlybuilds 2 Docker images → pushes to registrydeploy-stagingafter build-stagingSSH into staging server → pull images → restart containersdeploy-productionafter build-productionSSH into production server → pull images → restart containers
-Key practices applied
+CI/CD Pipeline — GitHub Actions
 
-Job dependencies — build only runs if test passes, deploy only runs if build passes
-Branch conditions — pushing to staging never touches production server and vice versa
-GitHub Actions cache — Docker layers cached between runs via type=gha to speed up builds
-SHA image tagging — every image tagged with commit SHA so every build is traceable to exact commit
-Secrets management — server host and SSH keys stored in GitHub Secrets, never appear in code or logs
-Zero-downtime deploy — docker-compose up -d restarts containers without dropping the service
-Disk cleanup — docker system prune -f runs after every deploy to free server disk space
+Built a demo CI/CD pipeline using GitHub Actions
+ for automated testing, Docker image building, and deployment.
 
+Workflow
+Code pushes on staging and main branches automatically trigger the pipeline
+Runs lint checks and unit tests for backend and frontend
+Builds Docker images after successful testing
+Deploys staging and production environments separately
+Uses SSH and Docker Compose for automated server deployment
+Features Implemented
+Branch-based deployment (staging and production separated)
+Automated Docker image build and push
+GitHub Secrets for secure credentials management
+Commit SHA tagging for version tracking
+Docker cache optimization for faster builds
+Zero-downtime container restart using Docker Compose
+Automatic Docker cleanup to save server disk space
+Tools & Technologies
+GitHub Actions
+Docker & Docker Compose
+Linux Server
+SSH
+CI/CD Automation
+Git & GitHub
+
+This was a hands-on demo project to practice DevOps workflow automation and deployment processes.
 
 🔐 Security Highlights
 
