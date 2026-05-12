@@ -9,13 +9,13 @@ RUN npm install -g angular-http-server
 WORKDIR /app/client
 
 # Copy the package.json and package-lock.json for the frontend
-COPY client/package*.json ./
+COPY cli/package*.json ./
 
 # Install frontend dependencies
 RUN npm install
 
 # Copy the entire client folder to ensure the Angular workspace is present
-COPY client/ .
+COPY cli/ .
 
 # Build the frontend for staging
 RUN npm run build-staging
